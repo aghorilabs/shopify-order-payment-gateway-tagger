@@ -25,6 +25,53 @@ This project consists of two main components:
 - Shopify store with Admin API access
 - Shopify Admin API access token with appropriate permissions
 
+## Shopify Custom App Setup
+
+### Creating a Custom App
+
+To use this tool, you need to create a custom app in your Shopify store:
+
+1. **Log in to your Shopify Admin**
+2. Navigate to **Apps and sales channels** > **Apps**
+3. Click **Develop apps for your store**
+4. Click **Create an app**
+5. Enter an app name (e.g., "Order Payment Gateway Tagger")
+6. Select the app developer (your email)
+7. Click **Create app**
+
+### Configuring API Permissions
+
+After creating the app, you need to configure the appropriate Admin API access scopes:
+
+1. In the app dashboard, go to **Configuration** > **Admin API integration**
+2. Click **Configure Admin API access scopes**
+3. Set the following **Read permissions**:
+   - `read_orders` - Required to fetch order data
+
+4. Set the following **Write permissions**:
+   - `write_orders` - Required to add tags to orders
+
+5. Click **Save** at the bottom of the page
+
+### Installing the App
+
+1. After configuring permissions, click **Install app**
+2. Review the access permissions and click **Install**
+3. Your app will be installed and you'll receive an **Admin API access token**
+
+### Getting Your API Credentials
+
+1. In the app dashboard, go to **API credentials**
+2. Copy the **Admin API access token** (this is your `SHOPIFY_ACCESS_TOKEN`)
+3. Note your store name (e.g., `your-store-name.myshopify.com`) for the `SHOPIFY_STORE_NAME`
+
+### Important Notes
+
+- The Admin API access token is sensitive - keep it secure and never share it
+- Custom apps are only visible to your store - they won't appear in the Shopify App Store
+- You can always modify permissions later if needed
+- If you lose access to your token, you can regenerate it in the API credentials section
+
 ## Installation
 
 1. Clone or download this project to your local machine
@@ -49,6 +96,8 @@ This project consists of two main components:
    SHOPIFY_STORE_NAME=your-store-name.myshopify.com
    SHOPIFY_ACCESS_TOKEN=your-admin-api-access-token
    ```
+   
+   **Note**: Get these values from your custom app configuration as described in the "Shopify Custom App Setup" section above.
 
 ## Usage
 
@@ -98,8 +147,23 @@ The `Tag orders by payment gateway.flow` file can be imported into Shopify Flow 
 ### API Authentication
 
 The tool uses Shopify's GraphQL Admin API (version 2024-01) with the following permissions:
-- Read orders
-- Write orders
+- `read_orders` - Required to fetch order data
+- `write_orders` - Required to add tags to orders
+
+### API Endpoints
+
+The tool connects to:
+```
+https://{your-store-name}.myshopify.com/admin/api/2024-01/graphql.json
+```
+
+### Authentication Headers
+```json
+{
+  "Content-Type": "application/json",
+  "X-Shopify-Access-Token": "your-admin-api-access-token"
+}
+```
 
 ### Rate Limiting
 
